@@ -9,12 +9,12 @@ import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class HelloWorldObservableResource extends CoapResource {
+public class TemperatureObservableResource extends CoapResource {
 
 	private String temperature;
 	private String name;
 	
-	public HelloWorldObservableResource(String name) {
+	public TemperatureObservableResource(String name) {
 
 		super(name);
 		this.name = name;
@@ -43,18 +43,17 @@ public class HelloWorldObservableResource extends CoapResource {
 
 	@Override
 	public void handleGET(CoapExchange exchange) {
-		exchange.setMaxAge(1); // the Max-Age value should match the update interval
+		// the Max-Age value should match the update interval
+		exchange.setMaxAge(1);
 		exchange.respond(this.temperature);
 	}
 	@Override
 	public void handleDELETE(CoapExchange exchange) {
-		delete(); // will also call clearAndNotifyObserveRelations(ResponseCode.NOT_FOUND)
-		exchange.respond(ResponseCode.DELETED);
+		super.handleDELETE(exchange);
 	}
 	@Override
 	public void handlePUT(CoapExchange exchange) {
-		exchange.respond(ResponseCode.CHANGED);
-		changed(); // notify all observers
+		super.handlePUT(exchange);
 	}
 
 	

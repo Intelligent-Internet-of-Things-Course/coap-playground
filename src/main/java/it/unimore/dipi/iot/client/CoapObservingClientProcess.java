@@ -1,10 +1,9 @@
 package it.unimore.dipi.iot.client;
 
-import org.eclipse.californium.core.CoapClient;
-import org.eclipse.californium.core.CoapHandler;
-import org.eclipse.californium.core.CoapObserveRelation;
-import org.eclipse.californium.core.CoapResponse;
+import org.eclipse.californium.core.*;
 import org.eclipse.californium.core.coap.Request;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * A simple CoAP Synchronous Client implemented using Californium Java Library
@@ -12,18 +11,18 @@ import org.eclipse.californium.core.coap.Request;
  */
 public class CoapObservingClientProcess {
 
+    private final static Logger logger = LoggerFactory.getLogger(CoapObservingClientProcess.class);
+
     public static void main(String[] args) {
 
-        String targetCoapResourceURL = "coap://localhost:5683/hello-world-obs";
+        String targetCoapResourceURL = "coap://localhost:5683/temperature-sensor-obs";
 
         CoapClient client = new CoapClient(targetCoapResourceURL);
 
-        System.out.println("OBSERVING..");
+        logger.info("OBSERVING ... {}", targetCoapResourceURL);
 
         Request request = Request.newGet().setURI(targetCoapResourceURL).setObserve();
-        request.setMID(8888);
-        byte[] token = "a".getBytes();
-        request.setToken(token);
+        request.setConfirmable(true);
 
         // NOTE:
         // The client.observe(Request, CoapHandler) method visibility has been changed from "private"
@@ -32,22 +31,13 @@ public class CoapObservingClientProcess {
         CoapObserveRelation relation = client.observe(request, new CoapHandler() {
 
             public void onLoad(CoapResponse response) {
-
                 String content = response.getResponseText();
-                byte[] token = response.advanced().getTokenBytes();
-                String MID = Integer.toString(response.advanced().getMID());
-
-                System.out.println("NOTIFICATION: " + content);
-                System.out.println("Token: ");
-
-                for (int i=0;i<token.length;i++)
-                    System.out.print(token[i] +" ");
-
-                System.out.println("\nMID: " + MID);
+                logger.info("Notification Response Pretty Print: {}", Utils.prettyPrint(response));
+                logger.info("NOTIFICATION Body: " + content);
             }
 
             public void onError() {
-                System.err.println("OBSERVING FAILED");
+                logger.error("OBSERVING FAILED");
             }
         });
 
@@ -58,7 +48,7 @@ public class CoapObservingClientProcess {
             e.printStackTrace();
         }
 
-        System.out.println("CANCELLATION.....");
+        logger.error("CANCELLATION.....");
         relation.proactiveCancel();
 
     }

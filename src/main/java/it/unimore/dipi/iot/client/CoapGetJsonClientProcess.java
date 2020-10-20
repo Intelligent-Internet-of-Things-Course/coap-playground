@@ -8,17 +8,25 @@ import org.eclipse.californium.core.coap.MediaTypeRegistry;
 import org.eclipse.californium.core.coap.OptionSet;
 import org.eclipse.californium.core.coap.Request;
 import org.eclipse.californium.elements.exception.ConnectorException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+
 
 /**
  * A simple CoAP Synchronous Client implemented using Californium Java Library
  * The simple client send a GET request to a target CoAP Resource with some custom request parameters
+ *
+ * @author Marco Picone, Ph.D. - picone.m@gmail.com
+ * @project coap-playground
+ * @created 20/10/2020 - 09:19
  */
-public class CoapClientProcess {
+public class CoapGetJsonClientProcess {
 
-	//private static final String COAP_ENDPOINT = "coap://127.0.0.1:5683/hello-world";
-	private static final String COAP_ENDPOINT = "coap://127.0.0.1:5683/temperature-sensor";
+	private final static Logger logger = LoggerFactory.getLogger(CoapGetJsonClientProcess.class);
+
+	private static final String COAP_ENDPOINT = "coap://127.0.0.1:5683/json-temperature-sensor";
 
 	public static void main(String[] args) {
 		
@@ -29,16 +37,14 @@ public class CoapClientProcess {
 		//"Message ID", "Token" and other header's fields can be set 
 		Request request = new Request(Code.GET);
 
-		//Set MID
-		request.setMID(8888);
-
-		//Set Token
-		byte[] token = "a".getBytes();
-		request.setToken(token);
-
 		//Set Options
-		request.setOptions(new OptionSet().setAccept(MediaTypeRegistry.APPLICATION_SENML_JSON));
-		
+		request.setOptions(new OptionSet().setAccept(MediaTypeRegistry.APPLICATION_JSON));
+
+		//Set Request as Confirmable
+		request.setConfirmable(true);
+
+		logger.info("Request Pretty Print: {}", Utils.prettyPrint(request));
+
 		//Synchronously send the GET message (blocking call)
 		CoapResponse coapResp = null;
 
@@ -46,16 +52,16 @@ public class CoapClientProcess {
 
 			coapResp = coapClient.advanced(request);
 
+			//Pretty print for the received response
+			logger.info("Response Pretty Print: {}", Utils.prettyPrint(coapResp));
+
 			//The "CoapResponse" message contains the response.
 			String text = coapResp.getResponseText();
-			System.out.println(text);
-			System.out.println(Utils.prettyPrint(coapResp));
-			System.out.println("Message ID: " + coapResp.advanced().getMID());
-			System.out.println("Token: " + coapResp.advanced().getTokenString());
+			logger.info("Payload: {}", text);
+			logger.info("Message ID: " + coapResp.advanced().getMID());
+			logger.info("Token: " + coapResp.advanced().getTokenString());
 
-		} catch (ConnectorException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
+		} catch (ConnectorException | IOException e) {
 			e.printStackTrace();
 		}
 	}
