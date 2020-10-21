@@ -17,6 +17,7 @@ import java.io.IOException;
 /**
  * A simple CoAP Synchronous Client implemented using Californium Java Library
  * The simple client send a GET request to a target CoAP Resource with some custom request parameters
+ * Add the Accept header to application-json to request the target content type
  *
  * @author Marco Picone, Ph.D. - picone.m@gmail.com
  * @project coap-playground
@@ -43,7 +44,7 @@ public class CoapGetJsonClientProcess {
 		//Set Request as Confirmable
 		request.setConfirmable(true);
 
-		logger.info("Request Pretty Print: {}", Utils.prettyPrint(request));
+		logger.info("Request Pretty Print: \n{}", Utils.prettyPrint(request));
 
 		//Synchronously send the GET message (blocking call)
 		CoapResponse coapResp = null;
@@ -53,7 +54,7 @@ public class CoapGetJsonClientProcess {
 			coapResp = coapClient.advanced(request);
 
 			//Pretty print for the received response
-			logger.info("Response Pretty Print: {}", Utils.prettyPrint(coapResp));
+			logger.info("Response Pretty Print: \n{}", Utils.prettyPrint(coapResp));
 
 			//The "CoapResponse" message contains the response.
 			String text = coapResp.getResponseText();

@@ -1,6 +1,9 @@
 package it.unimore.dipi.iot.server.model;
 
 /**
+ *
+ * Demo POJO used to structure a simple Temperature Data Structure
+ *
  * @author Marco Picone, Ph.D. - picone.m@gmail.com
  * @project coap-playground
  * @created 20/10/2020 - 21:54

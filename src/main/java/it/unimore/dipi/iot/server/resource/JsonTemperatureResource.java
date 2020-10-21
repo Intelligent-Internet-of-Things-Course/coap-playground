@@ -3,13 +3,27 @@ package it.unimore.dipi.iot.server.resource;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import it.unimore.dipi.iot.server.model.TemperatureDataDescriptor;
 import org.eclipse.californium.core.CoapResource;
+import org.eclipse.californium.core.Utils;
 import org.eclipse.californium.core.coap.CoAP.ResponseCode;
 import org.eclipse.californium.core.coap.MediaTypeRegistry;
 import org.eclipse.californium.core.server.resources.CoapExchange;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Random;
 
+/**
+ * Simple temperature resource represented as double value
+ * and responding using both Text-Based and Application-Json
+ * according to the received Accept Request's Option
+ *
+ * @author Marco Picone, Ph.D. - picone.m@gmail.com
+ * @project coap-playground
+ * @created 20/10/2020 - 21:54
+ */
 public class JsonTemperatureResource extends CoapResource {
+
+	private final static Logger logger = LoggerFactory.getLogger(JsonTemperatureResource.class);
 
 	private static final int TEMPERATURE_VALUE_BOUND = 30;
 
@@ -51,9 +65,13 @@ public class JsonTemperatureResource extends CoapResource {
 
 	@Override
 	public void handleGET(CoapExchange exchange) {
+
+		logger.info("Request Pretty Print:\n{}", Utils.prettyPrint(exchange.advanced().getRequest()));
+
 		updateTemperatureValue();
+
 		if(exchange.getRequestOptions().getAccept() == MediaTypeRegistry.APPLICATION_JSON)
-			exchange.respond(ResponseCode.CONTENT, getJsonResponse(), MediaTypeRegistry.APPLICATION_SENML_JSON);
+			exchange.respond(ResponseCode.CONTENT, getJsonResponse(), MediaTypeRegistry.APPLICATION_JSON);
 		else
 			exchange.respond(ResponseCode.CONTENT, getTextResponse(), MediaTypeRegistry.TEXT_PLAIN);
 	}

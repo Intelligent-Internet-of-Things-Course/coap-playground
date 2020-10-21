@@ -8,6 +8,10 @@ import org.slf4j.LoggerFactory;
 /**
  * A simple CoAP Synchronous Client implemented using Californium Java Library
  * The client Observe a target resource for 10 Seconds and then cancel the request and ends the execution
+ *
+ * @author Marco Picone, Ph.D. - picone.m@gmail.com
+ * @project coap-playground
+ * @created 20/10/2020 - 21:54
  */
 public class CoapObservingClientProcess {
 
@@ -32,7 +36,7 @@ public class CoapObservingClientProcess {
 
             public void onLoad(CoapResponse response) {
                 String content = response.getResponseText();
-                logger.info("Notification Response Pretty Print: {}", Utils.prettyPrint(response));
+                logger.info("Notification Response Pretty Print: \n{}", Utils.prettyPrint(response));
                 logger.info("NOTIFICATION Body: " + content);
             }
 

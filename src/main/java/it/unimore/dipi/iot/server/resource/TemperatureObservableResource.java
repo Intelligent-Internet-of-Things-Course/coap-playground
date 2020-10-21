@@ -1,7 +1,6 @@
 package it.unimore.dipi.iot.server.resource;
 
 import org.eclipse.californium.core.CoapResource;
-import org.eclipse.californium.core.coap.CoAP.ResponseCode;
 import org.eclipse.californium.core.coap.CoAP.Type;
 import org.eclipse.californium.core.server.resources.CoapExchange;
 
@@ -9,9 +8,17 @@ import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
+/**
+ * Simple temperature Observable resource represented as double value
+ *
+ * @author Marco Picone, Ph.D. - picone.m@gmail.com
+ * @project coap-playground
+ * @created 20/10/2020 - 21:54
+ */
 public class TemperatureObservableResource extends CoapResource {
 
 	private String temperature;
+
 	private String name;
 	
 	public TemperatureObservableResource(String name) {
@@ -23,7 +30,8 @@ public class TemperatureObservableResource extends CoapResource {
 
 		setObservable(true); // enable observing
 		setObserveType(Type.CON); // configure the notification type to CONs
-		getAttributes().setTitle("Hello-World Resource Observable");
+
+		getAttributes().setTitle("Temperature Observable Resource");
 		getAttributes().setObservable(); // mark observable in the Link-Format
 
 		// schedule a periodic update task, otherwise let events call changed()

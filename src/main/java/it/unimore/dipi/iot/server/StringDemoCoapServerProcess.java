@@ -5,6 +5,14 @@ import org.eclipse.californium.core.CoapServer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Demo String CoAP Smart Object hosting 1 string as editable resource.
+ * Supports GET, POST and PUT to read and update the memorized value.
+ *
+ * @author Marco Picone, Ph.D. - picone.m@gmail.com
+ * @project coap-playground
+ * @created 20/10/2020 - 21:54
+ */
 public class StringDemoCoapServerProcess extends CoapServer{
 
 	private final static Logger logger = LoggerFactory.getLogger(StringDemoResource.class);
@@ -12,9 +20,7 @@ public class StringDemoCoapServerProcess extends CoapServer{
 	public StringDemoCoapServerProcess(){
 
 		super();
-
 		StringDemoResource stringDemoResource = new StringDemoResource("demo");
-
 		//Add resources ....
 		this.add(stringDemoResource);
 	}

@@ -41,7 +41,7 @@ public class CoapAsynchronousGetClientProcess {
 
 			public void onLoad(CoapResponse coapResp) {
 
-				logger.info("PrettyPrint Response: {}", Utils.prettyPrint(coapResp));
+				logger.info("PrettyPrint Response: \n{}", Utils.prettyPrint(coapResp));
 				semaphore.release();
 			}
 

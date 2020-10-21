@@ -1,6 +1,5 @@
 package it.unimore.dipi.iot.server.resource;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.eclipse.californium.core.CoapResource;
 import org.eclipse.californium.core.coap.CoAP.ResponseCode;
 import org.eclipse.californium.core.coap.MediaTypeRegistry;
@@ -8,6 +7,13 @@ import org.eclipse.californium.core.server.resources.CoapExchange;
 
 import java.util.Random;
 
+/**
+ * Simple temperature resource represented as double value
+ *
+ * @author Marco Picone, Ph.D. - picone.m@gmail.com
+ * @project coap-playground
+ * @created 20/10/2020 - 21:54
+ */
 public class TemperatureResource extends CoapResource {
 
 	private static final int TEMPERATURE_VALUE_BOUND = 30;
@@ -38,7 +44,6 @@ public class TemperatureResource extends CoapResource {
 
 	@Override
 	public void handleGET(CoapExchange exchange) {
-
 		updateTemperatureValue();
 		exchange.respond(ResponseCode.CONTENT, getTextResponse(), MediaTypeRegistry.TEXT_PLAIN);
 	}

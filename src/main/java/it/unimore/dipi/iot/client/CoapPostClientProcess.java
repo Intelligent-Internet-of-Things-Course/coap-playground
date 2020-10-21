@@ -8,21 +8,21 @@ import org.eclipse.californium.core.coap.Request;
 import org.eclipse.californium.elements.exception.ConnectorException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import java.io.IOException;
 
 
 /**
  * A simple CoAP Synchronous Client implemented using Californium Java Library
- * The simple client send a GET request to a target CoAP Resource with some custom request parameters
+ * The simple client send a POST request to a target CoAP Resource with some custom request parameters
+ * and Payload (if necessary)
  *
  * @author Marco Picone, Ph.D. - picone.m@gmail.com
  * @project coap-playground
  * @created 20/10/2020 - 09:19
  */
-public class CoapGetClientProcess {
+public class CoapPostClientProcess {
 
-	private final static Logger logger = LoggerFactory.getLogger(CoapGetClientProcess.class);
+	private final static Logger logger = LoggerFactory.getLogger(CoapPostClientProcess.class);
 
 	private static final String COAP_ENDPOINT = "coap://127.0.0.1:5683/demo";
 
@@ -35,7 +35,10 @@ public class CoapGetClientProcess {
 
 		//Request Class is a generic CoAP message: in this case we want a GET.
 		//"Message ID", "Token" and other header's fields can be set 
-		Request request = new Request(Code.GET);
+		Request request = new Request(Code.POST);
+
+		//If the POST request has a payload it can be set with the following command
+		//request.setPayload(myPayload);
 
 		//In required it is also possible to set a specific MID
 		//request.setMID(8888);
@@ -47,9 +50,9 @@ public class CoapGetClientProcess {
 		//Set Request as Confirmable
 		request.setConfirmable(true);
 
-		logger.info("Request Pretty Print: \n{}", Utils.prettyPrint(request));
+		logger.info("Request Pretty Print:\n{}", Utils.prettyPrint(request));
 
-		//Synchronously send the GET message (blocking call)
+		//Synchronously send the POST request (blocking call)
 		CoapResponse coapResp = null;
 
 		try {

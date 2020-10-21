@@ -1,5 +1,6 @@
 package it.unimore.dipi.iot.client;
 
+import it.unimore.dipi.iot.utils.StringGenerator;
 import org.eclipse.californium.core.CoapClient;
 import org.eclipse.californium.core.CoapResponse;
 import org.eclipse.californium.core.Utils;
@@ -14,15 +15,16 @@ import java.io.IOException;
 
 /**
  * A simple CoAP Synchronous Client implemented using Californium Java Library
- * The simple client send a GET request to a target CoAP Resource with some custom request parameters
+ * The simple client send a PUT request to a target CoAP Resource with some custom request parameters
+ * and payload
  *
  * @author Marco Picone, Ph.D. - picone.m@gmail.com
  * @project coap-playground
  * @created 20/10/2020 - 09:19
  */
-public class CoapGetClientProcess {
+public class CoapPutClientProcess {
 
-	private final static Logger logger = LoggerFactory.getLogger(CoapGetClientProcess.class);
+	private final static Logger logger = LoggerFactory.getLogger(CoapPutClientProcess.class);
 
 	private static final String COAP_ENDPOINT = "coap://127.0.0.1:5683/demo";
 
@@ -33,23 +35,21 @@ public class CoapGetClientProcess {
 		//Initialize coapClient
 		CoapClient coapClient = new CoapClient(COAP_ENDPOINT);
 
-		//Request Class is a generic CoAP message: in this case we want a GET.
+		//Request Class is a generic CoAP message: in this case we want a PUT.
 		//"Message ID", "Token" and other header's fields can be set 
-		Request request = new Request(Code.GET);
+		Request request = new Request(Code.PUT);
 
-		//In required it is also possible to set a specific MID
-		//request.setMID(8888);
-
-		//In required it is also possible to set a specific Token
-		//byte[] token = "a".getBytes();
-		//request.setToken(token);
+		//Set PUT request's payload
+		String myPayload = StringGenerator.generateRandomAlphanumericString();
+		logger.info("PUT Request Random Payload: {}", myPayload);
+		request.setPayload(myPayload);
 
 		//Set Request as Confirmable
 		request.setConfirmable(true);
 
 		logger.info("Request Pretty Print: \n{}", Utils.prettyPrint(request));
 
-		//Synchronously send the GET message (blocking call)
+		//Synchronously send the POST request (blocking call)
 		CoapResponse coapResp = null;
 
 		try {
