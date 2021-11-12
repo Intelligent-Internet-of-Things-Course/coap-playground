@@ -34,7 +34,7 @@ public class StringDemoCoapServerProcess extends CoapServer{
 		demoCoapServerProcess.start();
 
 		logger.info("Coap Server Started ! Available resources: ");
-
+		
 		demoCoapServerProcess.getRoot().getChildren().stream().forEach(resource -> {
 			logger.info("Resource {} -> URI: {}", resource.getName(), resource.getURI());
 		});
